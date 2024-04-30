@@ -28,10 +28,7 @@ fn color_from_hex(hex: &str) -> Option<Color32> {
     if hex == "none" {
         return Some(Color32::from_rgba_premultiplied(255, 0, 255, 0));
     }
-    let rgb = (1..hex.len())
-        .step_by(2)
-        .filter_map(|i| u8::from_str_radix(&hex[i..i + 2], 16).ok())
-        .collect::<Vec<u8>>();
+    let rgb = (1..hex.len()).step_by(2).filter_map(|i| u8::from_str_radix(&hex[i..i + 2], 16).ok()).collect::<Vec<u8>>();
     let color = Color32::from_rgb(*rgb.first()?, *rgb.get(1)?, *rgb.get(2)?);
     Some(color)
 }
@@ -92,7 +89,7 @@ impl ColorTheme {
         style.visuals.selection.bg_fill = self.selection();
         style.visuals.extreme_bg_color = self.bg();
         style.override_font_id = Some(egui::FontId::monospace(fontsize));
-        style.visuals.text_cursor.width = fontsize * 0.1;
+        style.visuals.text_cursor.stroke.width = fontsize * 0.1;
     }
 
     pub const fn type_color_str(&self, ty: TokenType) -> &'static str {
@@ -129,13 +126,7 @@ impl ColorTheme {
         .unwrap_or(ERROR_COLOR)
     }
 
-    pub fn monocolor(
-        dark: bool,
-        bg: &'static str,
-        fg: &'static str,
-        cursor: &'static str,
-        selection: &'static str,
-    ) -> Self {
+    pub fn monocolor(dark: bool, bg: &'static str, fg: &'static str, cursor: &'static str, selection: &'static str) -> Self {
         ColorTheme {
             name: "monocolor",
             dark,
