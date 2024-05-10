@@ -94,6 +94,7 @@ pub struct CodeEditor {
     fontsize: f32,
     rows: usize,
     vscroll: bool,
+    hscroll:bool,
     stick_to_bottom: bool,
     shrink: bool,
 }
@@ -117,6 +118,7 @@ impl Default for CodeEditor {
             fontsize: 10.0,
             rows: 10,
             vscroll: true,
+            hscroll: true,
             stick_to_bottom: false,
             shrink: false,
         }
@@ -180,6 +182,10 @@ impl CodeEditor {
     /// **Default: true**
     pub fn vscroll(self, vscroll: bool) -> Self {
         CodeEditor { vscroll, ..self }
+    }
+
+    pub fn hscroll(self, hscroll: bool) -> Self {
+        CodeEditor { hscroll, ..self }
     }
     /// Should the containing area shrink if the content is small?
     ///
@@ -267,7 +273,7 @@ impl CodeEditor {
                 if self.numlines {
                     self.numlines_show(h, text.as_str());
                 }
-                egui::ScrollArea::horizontal()
+                egui::ScrollArea::new([self.hscroll,self.vscroll])
                     .id_source(format!("{}_inner_scroll", self.id))
                     .show(h, |ui| {
                         let mut layouter = |ui: &egui::Ui, string: &str, _wrap_width: f32| {
